@@ -8,7 +8,7 @@
         <select id="table" name="table">
             {% for table in tables %}
                 {% if table.is_available %}
-                <option value="{{ table.id }}">{{ table.table.id }}</option>
+                <option value="{{ table.id }}"> Столик {{ table.id }}</option>
                 {% endif %}
             {% endfor %}
         </select>
