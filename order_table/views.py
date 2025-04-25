@@ -5,4 +5,4 @@ from order_table.models import *
 # Create your views here.
 def order_table(request):
     tables = Table.objects.all()
-    return render(request, 'order_table.html', {'tables': tables})
+    return render(request, 'order.html', {'tables': tables})
