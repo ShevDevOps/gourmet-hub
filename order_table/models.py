@@ -3,12 +3,14 @@ from django.core.exceptions import ValidationError
 from dishes.models import Dish
 
 class Table(models.Model):
-    table_number = models.IntegerField(unique=True)
     capacity = models.IntegerField()
     is_available = models.BooleanField(default=True)
 
     def __str__(self):
-        return f"Table {self.table_number} (Capacity: {self.capacity})"
+        a = f"Table {self.id} (Capacity: {self.capacity})"
+        if self.is_available: a += " - Available"
+        else: a += " - Not Available"
+        return a
 
 class Client(models.Model):
     name = models.CharField(max_length=100)

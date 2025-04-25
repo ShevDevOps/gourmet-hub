@@ -16,7 +16,8 @@ Including another URLconf
 """
 from django.contrib import admin
 from django.urls import path
-
+from order_table import views
 urlpatterns = [
     path('admin/', admin.site.urls),
+    path('order/', views.order_table, name='order_table'),
 ]

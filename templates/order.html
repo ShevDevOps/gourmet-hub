@@ -1,0 +1,18 @@
+<html>
+<head>
+    <title>Order Confirmation</title>
+</head>
+<body>
+{% load static %}
+    <form id = "order-form" method="POST" action="/order">
+        <select id="table" name="table">
+            {% for table in tables %}
+                {% if table.is_available %}
+                <option value="{{ table.id }}"> Столик {{ table.id }}</option>
+                {% endif %}
+            {% endfor %}
+        </select>
+
+        <button type="submit">Confirm Order</button>
+        </form>
+</html>
