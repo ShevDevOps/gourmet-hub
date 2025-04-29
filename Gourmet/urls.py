@@ -16,8 +16,15 @@ Including another URLconf
 """
 from django.contrib import admin
 from django.urls import path
-from order_table import views
+from order_table import views as order_views
+from dishes import views as dishes_views
+from shefs import views as shefs_views
+
 urlpatterns = [
     path('admin/', admin.site.urls),
-    path('order/', views.order_table, name='order_table'),
+    path('', dishes_views.index, name='index'),
+    path('order/', order_views.order_table, name='order_table'),
+    path('shefs/', shefs_views.shefs, name='shefs'),
+    path('dishes/', dishes_views.dishes, name='dishes'),
+    path('shefs/<int:shef_id>/', shefs_views.shef_detail, name='shef_detail'),
 ]
