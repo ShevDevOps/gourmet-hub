@@ -34,7 +34,6 @@
 </head>
 
 <body>
-<<<<<<< HEAD
     <div class="container-xxl bg-white p-0">
         <!-- Spinner Start -->
         <div id="spinner" class="show bg-white position-fixed translate-middle w-100 vh-100 top-50 start-50 d-flex align-items-center justify-content-center">
@@ -44,6 +43,8 @@
         </div>
         <!-- Spinner End -->
 
+        {% csrf_token %}
+        {% include "header.html" %}
 
         <!-- Navbar & Hero Start -->
         <!--
@@ -307,12 +308,4 @@
     <script src= '{% static "js/main.js" %}' ></script>
 </body>
 
-=======
-    {% load static %}
-    {% csrf_token %}
-    {% include "header.html" %}
-    <h1>Welcome to the Shef Page</h1>
-    <p>This is a simple HTML page.</p>
-</body>    
->>>>>>> main
 </html>
