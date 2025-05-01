@@ -19,6 +19,7 @@ from django.urls import path
 from order_table import views as order_views
 from dishes import views as dishes_views
 from shefs import views as shefs_views
+from Gourmet import views
 
 urlpatterns = [
     path('admin/', admin.site.urls),
@@ -27,4 +28,7 @@ urlpatterns = [
     path('shefs/', shefs_views.shefs, name='shefs'),
     path('dishes/', dishes_views.dishes, name='dishes'),
     path('shefs/<int:shef_id>/', shefs_views.shef_detail, name='shef_detail'),
+    path('register/', views.register, name='register'),
+    path('login/', views.login_user, name='login'),
+    path('logout/', views.logout_user, name='logout'),
 ]

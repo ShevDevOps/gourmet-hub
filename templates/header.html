@@ -1,0 +1,12 @@
+<div class="header">
+    <a class = "head-link" href="{% url 'index' %}" >Головна сторінка</a>
+    <a class = "head-link" href="{% url 'dishes' %}" >Блюда</a>
+    <a class = "head-link" href="{% url 'shefs' %}" >Наші шефи</a>
+    {% if user.is_authenticated %}
+        <a class = "head-link" href="{% url 'order_table' %}" >замовити столик</a>
+        <a class = "head-link" href="{% url 'logout' %}">Logout</a>
+    {% else %}
+        <a class = "head-link" href="{% url 'login' %}">Login</a>
+        <a class = "head-link" href="{% url 'register' %}">Реєстрація</a>
+    {% endif %}
+</div>
