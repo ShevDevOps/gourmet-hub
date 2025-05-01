@@ -1,5 +1,5 @@
 from django.shortcuts import render, redirect
-from django.contrib.auth import authenticate, login as auth_login
+from django.contrib.auth import authenticate, logout, login as auth_login
 from django.contrib import messages
 from django.http import JsonResponse
 from order_table.models import *
@@ -20,3 +20,7 @@ def login_user(request):  # Змінили ім'я функції
         else:
             messages.error(request, 'Invalid username or password')
     return render(request, 'login.html')
+
+def logout_user(request):
+    logout(request)  # Вихід користувача
+    return redirect('index')

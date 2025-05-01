@@ -30,4 +30,5 @@ urlpatterns = [
     path('shefs/<int:shef_id>/', shefs_views.shef_detail, name='shef_detail'),
     path('register/', views.register, name='register'),
     path('login/', views.login_user, name='login'),
+    path('logout/', views.logout_user, name='logout'),
 ]
