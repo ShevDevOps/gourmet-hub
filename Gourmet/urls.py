@@ -29,5 +29,5 @@ urlpatterns = [
     path('dishes/', dishes_views.dishes, name='dishes'),
     path('shefs/<int:shef_id>/', shefs_views.shef_detail, name='shef_detail'),
     path('register/', views.register, name='register'),
-    path('login/', views.login, name='login'),
+    path('login/', views.login_user, name='login'),
 ]
