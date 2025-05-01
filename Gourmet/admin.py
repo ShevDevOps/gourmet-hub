@@ -5,7 +5,6 @@ from shefs.models import *
 
 admin.site.register(Table)
 admin.site.register(Ordered_Table)
-admin.site.register(Client)
 admin.site.register(Dish)
 admin.site.register(Ingridient)
 admin.site.register(Chef)

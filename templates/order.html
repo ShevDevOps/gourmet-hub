@@ -3,7 +3,9 @@
     <title>Order Confirmation</title>
 </head>
 <body>
-{% load static %}
+    {% load static %}
+    {% csrf_token %}
+    {% include "header.html" %}
     <form id = "order-form" method="POST" action="/order">
         <select id="table" name="table">
             {% for table in tables %}

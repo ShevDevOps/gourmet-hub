@@ -1,6 +1,7 @@
 from django.db import models
 from django.core.exceptions import ValidationError
 from dishes.models import Dish
+from django.contrib.auth.models import User
 
 class Table(models.Model):
     capacity = models.IntegerField()
@@ -12,17 +13,8 @@ class Table(models.Model):
         else: a += " - Not Available"
         return a
 
-class Client(models.Model):
-    name = models.CharField(max_length=100)
-    email = models.EmailField(unique=True)
-    phone = models.CharField(max_length=20, unique=True)
-    password = models.CharField(max_length=100)
-    
-    def __str__(self):
-        return self.name
-
 class Ordered_Table(Table):
-    Client_Id = models.ForeignKey(Client, on_delete=models.CASCADE)
+    Client_Id = models.ForeignKey(User, on_delete=models.CASCADE)
     Client_num = models.IntegerField()
     Order_time = models.DateTimeField()
 
