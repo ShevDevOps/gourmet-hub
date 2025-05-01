@@ -16,10 +16,12 @@ Including another URLconf
 """
 from django.contrib import admin
 from django.urls import path
+from django.conf.urls.static import static
 from order_table import views as order_views
 from dishes import views as dishes_views
 from shefs import views as shefs_views
 from Gourmet import views
+from . import settings
 
 urlpatterns = [
     path('admin/', admin.site.urls),
@@ -32,3 +34,6 @@ urlpatterns = [
     path('login/', views.login_user, name='login'),
     path('logout/', views.logout_user, name='logout'),
 ]
+
+if settings.DEBUG:
+    urlpatterns += static(settings.MEDIA_URL, document_root = settings.MEDIA_ROOT)
