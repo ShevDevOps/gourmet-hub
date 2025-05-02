@@ -68,11 +68,9 @@
                                         <select class="form-select" id="tableSelect" name="table_id" onchange="updatePeopleOptions()">
                                             <option value="" disabled selected>Виберіть столик</option>
                                             {% for table in tables %}
-                                                {% if table.is_available %}
-                                                    <option value="{{ table.id }}" data-capacity="{{ table.capacity }}">
-                                                        Столик No {{ table.id }}; Місткість: {{ table.capacity }}
-                                                    </option>
-                                                {% endif %}
+                                                <option value="{{ table.id }}" data-capacity="{{ table.capacity }}">
+                                                    Столик No {{ table.id }}; Місткість: {{ table.capacity }}
+                                                </option>
                                             {% endfor %}
                                         </select>
                                         <label for="tableSelect">No Столика</label>
