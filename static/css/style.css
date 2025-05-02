@@ -477,3 +477,17 @@
     padding-right: 0;
     border-right: none;
 }
+
+.team-item {
+    width: 250px; /* Фіксована ширина для карток */
+    box-shadow: 0 0 15px rgba(0, 0, 0, 0.1);
+    transition: transform 0.3s ease;
+}
+
+.team-item:hover {
+    transform: scale(1.05); /* Ефект збільшення при наведенні */
+}
+
+.d-flex.flex-wrap.justify-content-center {
+    gap: 20px; /* Відстань між картками */
+}
