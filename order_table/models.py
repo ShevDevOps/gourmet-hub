@@ -5,7 +5,6 @@ from django.contrib.auth.models import User
 
 class Table(models.Model):
     capacity = models.IntegerField()
-    is_available = models.BooleanField(default=True)
 
     def __str__(self):
         a = f"Table {self.id} (Capacity: {self.capacity})"
@@ -16,7 +15,7 @@ class Table(models.Model):
 class Ordered_Table(Table):
     Client_Id = models.ForeignKey(User, on_delete=models.CASCADE)
     Client_num = models.IntegerField()
-    Order_time = models.DateTimeField()
+    Order_time = models.DateField()
 
     def clean(self):
         if self.capacity < self.Client_num:
@@ -24,7 +23,8 @@ class Ordered_Table(Table):
         super().clean()
 
     def __str__(self):
-        return self.name
+        a = f"Order {self.id} for {self.Client_Id} on {self.Order_time}"
+        return a
     
 class DishToTable(models.Model):
     table = models.ForeignKey(Ordered_Table, on_delete=models.CASCADE)
