@@ -16,6 +16,7 @@ class Table(models.Model):
 class Ordered_Table(Table):
     Client_Id = models.ForeignKey(User, on_delete=models.CASCADE)
     Client_num = models.IntegerField()
+    date = models.DateField()
     Order_time = models.DateTimeField()
 
     def clean(self):

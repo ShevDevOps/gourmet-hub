@@ -31,6 +31,10 @@
 
         <!-- Template Stylesheet -->
         <link href= '{% static "css/style.css" %}' rel="stylesheet">
+
+        <!-- JS -->
+        <script src= '{% static "js/order.js" %}'></script>
+
     <head>
     <body>
         {% load static %}
@@ -43,39 +47,45 @@
                         <h5 class="section-title ff-secondary text-start text-primary fw-normal">Reservation</h5>
                         <h1 class="text-white mb-4">Book A Table Online</h1>
                         <form method="POST" action="{% url 'order_table' %}">
+                            {% csrf_token %}
                             <div class="row g-3">
                                 <div class="col-md-6">
                                     <div class="form-floating">
-                                        <input type="text" class="form-control" id="name" placeholder="Your Name">
-                                        <label for="name">Your Name</label>
+                                        <input type="text" class="form-control" id="name" placeholder="Your Name" value="{% if user.is_authenticated %}{{ user.username }}{% endif %}" readonly>
+                                        <label for="name">Ваше ім'я</label>
                                     </div>
                                 </div>
+
                                 <div class="col-md-6">
                                     <div class="form-floating">
-                                        <input type="email" class="form-control" id="email" placeholder="Your Email">
-                                        <label for="email">Your Email</label>
+                                        <input type="date" class="form-control" id="date" name="date" placeholder="Select Date" required>
+                                        <label for="date">Select Date</label>
                                     </div>
                                 </div>
-                                <div class="col-md-6">
-                                    <div class="form-floating date" id="date3" data-target-input="nearest">
-                                        <input type="text" class="form-control datetimepicker-input" id="datetime" placeholder="Date & Time" data-target="#date3" data-toggle="datetimepicker" />
-                                        <label for="datetime">Date & Time</label>
-                                    </div>
-                                </div>
+                                <!-- Вибір столика -->
                                 <div class="col-md-6">
                                     <div class="form-floating">
-                                        <select class="form-select" id="select1">
-                                          <option value="1">People 1</option>
-                                          <option value="2">People 2</option>
-                                          <option value="3">People 3</option>
+                                        <select class="form-select" id="tableSelect" name="table_id" onchange="updatePeopleOptions()">
+                                            <option value="" disabled selected>Виберіть столик</option>
+                                            {% for table in tables %}
+                                                {% if table.is_available %}
+                                                    <option value="{{ table.id }}" data-capacity="{{ table.capacity }}">
+                                                        Столик No {{ table.id }}; Місткість: {{ table.capacity }}
+                                                    </option>
+                                                {% endif %}
+                                            {% endfor %}
                                         </select>
-                                        <label for="select1">No Of People</label>
-                                      </div>
+                                        <label for="tableSelect">No Столика</label>
+                                    </div>
                                 </div>
-                                <div class="col-12">
+
+                                <!-- Вибір кількості людей -->
+                                <div class="col-md-6">
                                     <div class="form-floating">
-                                        <textarea class="form-control" placeholder="Special Request" id="message" style="height: 100px"></textarea>
-                                        <label for="message">Special Request</label>
+                                        <select class="form-select" id="peopleSelect" name="people_count">
+                                            <option value="" disabled selected>Виберіть кількість людей</option>
+                                        </select>
+                                        <label for="peopleSelect">No Of People</label>
                                     </div>
                                 </div>
                                 <div class="col-12">
@@ -87,23 +97,5 @@
                 </div>
             </div>
         </div>
-    
-        <div class="modal fade" id="videoModal" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
-            <div class="modal-dialog">
-                <div class="modal-content rounded-0">
-                    <div class="modal-header">
-                        <h5 class="modal-title" id="exampleModalLabel">Youtube Video</h5>
-                        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
-                    </div>
-                    <div class="modal-body">
-                        <!-- 16:9 aspect ratio -->
-                        <div class="ratio ratio-16x9">
-                            <iframe class="embed-responsive-item" src="" id="video" allowfullscreen allowscriptaccess="always"
-                                allow="autoplay"></iframe>
-                        </div>
-                    </div>
-                </div>
-            </div>
-        </div>
-    </body>    
-    </html>
+    </body>
+</html>
