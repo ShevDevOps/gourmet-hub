@@ -1,0 +1,9 @@
+services:
+  web:
+    build: .
+    ports:
+      - "8000:8080"
+    volumes:
+      - webdata:/app/data
+volumes:
+  webdata:
