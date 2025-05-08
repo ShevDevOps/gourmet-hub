@@ -1,16 +1,15 @@
 {% load static %}
 <!DOCTYPE html>
-<html lang="en"> {# Changed language to English #}
+<html lang="en">
 
 <head>
     <meta charset="utf-8">
-    <title>Restaurant - Full Menu</title> {# Changed title #}
+    <title>Restaurant - Full Menu</title>
     <meta content="width=device-width, initial-scale=1.0" name="viewport">
     <meta content="" name="keywords">
     <meta content="" name="description">
 
     <link href='{% static "img/favicon.ico" %}' rel="icon">
-
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link href="https://fonts.googleapis.com/css2?family=Heebo:wght@400;500;600&family=Nunito:wght@600;700;800&family=Pacifico&display=swap" rel="stylesheet">
@@ -23,7 +22,6 @@
     <link href='{% static "css/style.css" %}' rel="stylesheet">
 
     <style>
-        /* Optional: Styles for filters and tags */
         .filter-form .form-label {
             font-weight: 600;
             margin-bottom: 0.3rem;
@@ -55,6 +53,19 @@
             font-size: 0.75em;
             font-style: italic;
         }
+        .category-header {
+            text-align: center;
+            margin-top: 2.5rem;
+            margin-bottom: 1.5rem;
+            padding-bottom: 0.5rem;
+            border-bottom: 2px solid var(--primary);
+            position: relative;
+        }
+        .category-header h2 {
+            font-family: 'Pacifico', cursive;
+            color: var(--primary);
+            font-size: 2.5rem;
+        }
     </style>
 </head>
 
@@ -65,7 +76,7 @@
                 <span class="sr-only">Loading...</span>
             </div>
         </div>
-        {% include "header.html" %} {# Assuming header.html exists and is correct #}
+        {% include "header.html" %}
 
         <div class="container-xxl py-5 bg-dark hero-header mb-5">
             <div class="container text-center my-5 pt-5 pb-4">
@@ -85,10 +96,8 @@
         <div class="container-xxl py-5">
             <div class="container">
                 
-
                 <div class="row mb-5 wow fadeInUp filter-form" data-wow-delay="0.2s">
                     <div class="col-12">
-                        {# Use GET method for filtering/searching to allow bookmarking/sharing results #}
                         <form method="get" action="{% url 'dishes' %}" class="row g-3 align-items-end bg-light p-3 rounded">
                             <div class="col-lg-3 col-md-6">
                                 <label for="search" class="form-label">Search</label>
@@ -117,12 +126,12 @@
                                 </select>
                             </div>
                             <div class="col-lg-3 col-md-6">
-                                <label class="form-label d-block mb-2">Other Filters</label> {# d-block mb-2 for spacing #}
+                                <label class="form-label d-block mb-2">Other Filters</label>
                                 <div class="d-flex flex-wrap">
                                     <div class="form-check form-check-inline me-3">
                                         <input class="form-check-input" type="checkbox" id="vegetarian" name="vegetarian" {% if filter_vegetarian %}checked{% endif %}>
                                         <label class="form-check-label" for="vegetarian">
-                                            <i class="fas fa-leaf text-success" title="Vegetarian"></i> Veg
+                                            <i class="fas fa-leaf text-success" title="Vegetarian"></i> Veg.
                                         </label>
                                     </div>
                                     <div class="form-check form-check-inline me-3">
@@ -131,67 +140,74 @@
                                             <i class="fas fa-pepper-hot text-danger" title="Spicy"></i> Spicy
                                         </label>
                                     </div>
-                                    {# Add other checkboxes here, e.g., is_gluten_free #}
                                 </div>
                             </div>
-                            <div class="col-lg-2 col-md-12"> {# Button takes full width on smaller screens #}
+                            <div class="col-lg-2 col-md-12">
                                 <button type="submit" class="btn btn-primary btn-sm w-100">Filter / Search</button>
                             </div>
                         </form>
                     </div>
                 </div>
-                <div class="row g-4">
-                    {% for dish in dishes %}
-                    <div class="col-lg-6 wow fadeInUp" data-wow-delay="{{ forloop.counter0|divisibleby:2|yesno:'0.1,0.2' }}s"> {# Basic animation delay staggering #}
-                        <div class="d-flex align-items-center">
-                            {# Display image or placeholder #}
-                            {% if dish.image %}
-                                <img class="flex-shrink-0 img-fluid rounded" src="{{ dish.image.url }}" alt="{{ dish.name }}" style="width: 80px; height: 80px; object-fit: cover;">
-                            {% else %}
-                                <div class="dish-img-placeholder rounded">
-                                    <i class="fas fa-utensils"></i> {# Font Awesome icon #}
-                                </div>
-                            {% endif %}
-                            <div class="w-100 d-flex flex-column text-start ps-4">
-                                <h5 class="d-flex justify-content-between border-bottom pb-2 mb-1">
-                                    <span>
-                                        {{ dish.name }}
-                                        {# Display boolean icons if applicable #}
-                                        {% if dish.is_vegetarian %}<i class="fas fa-leaf text-success ms-1 fs- L" title="Vegetarian"></i>{% endif %}
-                                        {% if dish.is_spicy %}<i class="fas fa-pepper-hot text-danger ms-1" title="Spicy"></i>{% endif %}
-                                    </span>
-                                    <span class="text-primary">${{ dish.price|floatformat:2 }}</span> {# Format price #}
-                                </h5>
-                                {% if dish.description %}
-                                    <small class="fst-italic text-muted mb-1">{{ dish.description|truncatewords:15 }}</small> {# Truncate description #}
-                                {% endif %}
-                                {% if dish.standard_category %}
-                                <small class="text-muted d-block mb-1">Category: {{ dish.standard_category.name }}</small>
-                                {% endif %}
-                                {# Display recommendation tags #}
-                                {% if dish.recommendation_tags.exists %} {# Use exists for efficiency #}
-                                    <div class="dish-tags mt-1">
-                                        {% for tag in dish.recommendation_tags.all %}
-                                            <span>{{ tag.name }}</span>
-                                        {% endfor %}
-                                    </div>
-                                {% endif %}
-                            </div>
+
+                {% regroup dishes by standard_category as category_list %}
+
+                {% if category_list %}
+                    {% for category_group in category_list %}
+                        <div class="category-header wow fadeInUp" data-wow-delay="0.1s">
+                           <h2>{% if category_group.grouper %}{{ category_group.grouper.name }}{% else %}Інші страви{% endif %}</h2>
                         </div>
-                    </div>
-                    {% empty %}
-                    {# Message shown if no dishes match the filters #}
-                    <div class="col-12 text-center wow fadeInUp" data-wow-delay="0.1s">
+                        <div class="row g-4">
+                            {% for dish in category_group.list %}
+                            <div class="col-lg-6 wow fadeInUp" data-wow-delay="{{ forloop.counter0|divisibleby:2|yesno:'0.1,0.2' }}s">
+                                <div class="d-flex align-items-center">
+                                    {% if dish.image %}
+                                        <a href="{% url 'dish_detail' dish_id=dish.id %}">
+                                            <img class="flex-shrink-0 img-fluid rounded" src="{{ dish.image.url }}" alt="{{ dish.name }}" style="width: 80px; height: 80px; object-fit: cover;">
+                                        </a>
+                                    {% else %}
+                                         <a href="{% url 'dish_detail' dish_id=dish.id %}" class="dish-img-placeholder rounded">
+                                            <i class="fas fa-utensils"></i>
+                                        </a>
+                                    {% endif %}
+                                    <div class="w-100 d-flex flex-column text-start ps-4">
+                                        <h5 class="d-flex justify-content-between border-bottom pb-2 mb-1">
+                                            <span>
+                                                <a href="{% url 'dish_detail' dish_id=dish.id %}" class="text-dark text-decoration-none">
+                                                    {{ dish.name }}
+                                                </a>
+                                                {% if dish.is_vegetarian %}<i class="fas fa-leaf text-success ms-1 fs- L" title="Вегетаріанська"></i>{% endif %}
+                                                {% if dish.is_spicy %}<i class="fas fa-pepper-hot text-danger ms-1" title="Гостра"></i>{% endif %}
+                                            </span>
+                                            <span class="text-primary">${{ dish.price|floatformat:2 }}</span>
+                                        </h5>
+                                        {% if dish.description %}
+                                            <small class="fst-italic text-muted mb-1">{{ dish.description|truncatewords:12 }}</small>
+                                        {% endif %}
+                                        {% if dish.recommendation_tags.exists %}
+                                            <div class="dish-tags mt-1">
+                                                {% for tag in dish.recommendation_tags.all %}
+                                                    <span>{{ tag.name }}</span>
+                                                {% endfor %}
+                                            </div>
+                                        {% endif %}
+                                        <a href="{% url 'dish_detail' dish_id=dish.id %}" class="btn btn-sm btn-outline-primary mt-2" style="max-width: 150px;">More details</a>
+                                    </div>
+                                </div>
+                            </div>
+                            {% endfor %}
+                        </div>
+                    {% endfor %}
+                {% else %}
+                     <div class="col-12 text-center wow fadeInUp" data-wow-delay="0.1s">
                         <p class="lead">Sorry, no dishes found matching your criteria.</p>
                         <a href="{% url 'dishes' %}" class="btn btn-outline-primary mt-3">Reset Filters</a>
                     </div>
-                    {% endfor %}
-                </div>
-                {# Optional: Add Pagination if the menu is very large #}
-                 {# {% include "pagination.html" %} #}
+                {% endif %}
 
             </div>
         </div> 
+         
+        <a href="#" class="btn btn-lg btn-primary btn-lg-square back-to-top"><i class="bi bi-arrow-up"></i></a>
     </div>
 
     <script src="https://code.jquery.com/jquery-3.4.1.min.js"></script>
@@ -204,8 +220,6 @@
     <script src='{% static "lib/tempusdominus/js/moment.min.js" %}'></script>
     <script src='{% static "lib/tempusdominus/js/moment-timezone.min.js" %}'></script>
     <script src='{% static "lib/tempusdominus/js/tempusdominus-bootstrap-4.min.js" %}'></script>
-
     <script src='{% static "js/main.js" %}'></script>
 </body>
-
 </html>
