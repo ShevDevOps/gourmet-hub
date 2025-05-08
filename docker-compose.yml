@@ -5,5 +5,7 @@ services:
       - "8000:8080"
     volumes:
       - webdata:/app/data
+      - mediadata:/app/media
 volumes:
   webdata:
+  mediadata:
