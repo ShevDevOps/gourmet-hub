@@ -1,9 +1,23 @@
-from django.shortcuts import render
+from django.shortcuts import render, get_object_or_404
 from .models import *
 from django.db.models import Q, Prefetch
 
 def index(request):
     return render(request, 'index.html')
+
+def dish_detail(request, dish_id):
+    dish = get_object_or_404(
+        Dish.objects.select_related('standard_category')
+                     .prefetch_related(
+                         'recommendation_tags',
+                         Prefetch('ingrtodish_set', queryset=IngrToDish.objects.select_related('ingredient'))
+                     ),
+        pk=dish_id
+    )
+    context = {
+        'dish': dish
+    }
+    return render(request, 'dish_detail.html', context)
 
 def dishes(request):
     # Start with all dishes, optimizing related object fetching
