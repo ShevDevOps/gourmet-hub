@@ -158,7 +158,7 @@
                     <div class="col-lg-3 wow fadeInUp" data-wow-delay="0.1s">
                         <div class="filter-sidebar">
                             <h4 class="mb-4 ff-secondary text-primary">Filters</h4>
-                            <form method="get" action="{% url 'dishes' %}" id="filter-form">
+                            <form method="get" action="{% url 'dishes:dishes' %}" id="filter-form">
                                 <h5>Search</h5>
                                 <input type="text" class="form-control form-control-sm" id="search" name="search" placeholder="Name, description..." value="{{ search_query|default:'' }}">
 
@@ -213,7 +213,7 @@
 
                                 <div class="filter-actions d-flex mt-4">
                                     <button type="submit" class="btn btn-primary btn-sm">Apply</button>
-                                    <a href="{% url 'dishes' %}" class="btn btn-outline-secondary btn-sm ms-2">Reset</a>
+                                    <a href="{% url 'dishes:dishes' %}" class="btn btn-outline-secondary btn-sm ms-2">Reset</a>
                                 </div>
                             </form>
                         </div>
@@ -238,18 +238,18 @@
                                     <div class="col-md-6 wow fadeInUp" data-wow-delay="{{ forloop.counter0|divisibleby:2|yesno:'0.2,0.3' }}s">
                                         <div class="d-flex align-items-center">
                                             {% if dish.image %}
-                                                <a href="{% url 'dish_detail' dish_id=dish.id %}">
+                                                <a href="{% url 'dishes:dish_detail' dish_id=dish.id %}">
                                                     <img class="flex-shrink-0 img-fluid rounded" src="{{ dish.image.url }}" alt="{{ dish.name }}" style="width: 80px; height: 80px; object-fit: cover;">
                                                 </a>
                                             {% else %}
-                                                 <a href="{% url 'dish_detail' dish_id=dish.id %}" class="dish-img-placeholder rounded">
+                                                 <a href="{% url 'dishes:dish_detail' dish_id=dish.id %}" class="dish-img-placeholder rounded">
                                                     <i class="fas fa-utensils"></i>
                                                 </a>
                                             {% endif %}
                                             <div class="w-100 d-flex flex-column text-start ps-4">
                                                 <h5 class="d-flex justify-content-between border-bottom pb-2 mb-1">
                                                     <span>
-                                                        <a href="{% url 'dish_detail' dish_id=dish.id %}" class="text-dark text-decoration-none">
+                                                        <a href="{% url 'dishes:dish_detail' dish_id=dish.id %}" class="text-dark text-decoration-none">
                                                             {{ dish.name }}
                                                         </a>
                                                         {% if dish.is_vegetarian %}<i class="fas fa-leaf text-success ms-1" title="Вегетаріанська"></i>{% endif %}
@@ -267,7 +267,7 @@
                                                         {% endfor %}
                                                     </div>
                                                 {% endif %}
-                                                <a href="{% url 'dish_detail' dish_id=dish.id %}" class="btn btn-sm btn-outline-primary mt-2 align-self-start" style="max-width: 150px;">More details</a>
+                                                <a href="{% url 'dishes:dish_detail' dish_id=dish.id %}" class="btn btn-sm btn-outline-primary mt-2 align-self-start" style="max-width: 150px;">More details</a>
                                             </div>
                                         </div>
                                     </div>
@@ -280,18 +280,18 @@
                                      <div class="col-md-6 wow fadeInUp" data-wow-delay="{{ forloop.counter0|divisibleby:2|yesno:'0.2,0.3' }}s">
                                         <div class="d-flex align-items-center">
                                             {% if dish.image %}
-                                                <a href="{% url 'dish_detail' dish_id=dish.id %}">
+                                                <a href="{% url 'dishes:dish_detail' dish_id=dish.id %}">
                                                     <img class="flex-shrink-0 img-fluid rounded" src="{{ dish.image.url }}" alt="{{ dish.name }}" style="width: 80px; height: 80px; object-fit: cover;">
                                                 </a>
                                             {% else %}
-                                                 <a href="{% url 'dish_detail' dish_id=dish.id %}" class="dish-img-placeholder rounded">
+                                                 <a href="{% url 'dishes:dish_detail' dish_id=dish.id %}" class="dish-img-placeholder rounded">
                                                     <i class="fas fa-utensils"></i>
                                                 </a>
                                             {% endif %}
                                             <div class="w-100 d-flex flex-column text-start ps-4">
                                                 <h5 class="d-flex justify-content-between border-bottom pb-2 mb-1">
                                                     <span>
-                                                        <a href="{% url 'dish_detail' dish_id=dish.id %}" class="text-dark text-decoration-none">
+                                                        <a href="{% url 'dishes:dish_detail' dish_id=dish.id %}" class="text-dark text-decoration-none">
                                                             {{ dish.name }}
                                                         </a>
                                                         {% if dish.is_vegetarian %}<i class="fas fa-leaf text-success ms-1" title="Вегетаріанська"></i>{% endif %}
@@ -309,7 +309,7 @@
                                                         {% endfor %}
                                                     </div>
                                                 {% endif %}
-                                                <a href="{% url 'dish_detail' dish_id=dish.id %}" class="btn btn-sm btn-outline-primary mt-2 align-self-start" style="max-width: 150px;">More details</a>
+                                                <a href="{% url 'dishes:dish_detail' dish_id=dish.id %}" class="btn btn-sm btn-outline-primary mt-2 align-self-start" style="max-width: 150px;">More details</a>
                                             </div>
                                         </div>
                                     </div>
@@ -319,7 +319,7 @@
                         {% else %}
                              <div class="col-12 text-center wow fadeInUp mt-5" data-wow-delay="0.1s">
                                 <p class="lead">Sorry, no dishes found matching your criteria.</p>
-                                <a href="{% url 'dishes' %}" class="btn btn-outline-primary mt-3">Reset All Filters</a>
+                                <a href="{% url 'dishes:dishes' %}" class="btn btn-outline-primary mt-3">Reset All Filters</a>
                             </div>
                         {% endif %}
                     </div>
