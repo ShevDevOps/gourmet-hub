@@ -4,7 +4,7 @@
 
 <head>
     <meta charset="utf-8">
-    <title>{{ dish.name }} - Деталі страви</title>
+    <title>{{ dish.name }} - Dish details</title>
     <meta content="width=device-width, initial-scale=1.0" name="viewport">
     <meta content="{{ dish.name }}, {{ dish.standard_category.name|default:'' }}" name="keywords">
     <meta content="{{ dish.description|truncatewords:20 }}" name="description">
@@ -47,7 +47,7 @@
     <div class="container-xxl bg-white p-0">
         <div id="spinner" class="show bg-white position-fixed translate-middle w-100 vh-100 top-50 start-50 d-flex align-items-center justify-content-center">
             <div class="spinner-border text-primary" style="width: 3rem; height: 3rem;" role="status">
-                <span class="sr-only">Завантаження...</span>
+                <span class="sr-only">Loading...</span>
             </div>
         </div>
 
@@ -58,8 +58,8 @@
                 <h1 class="display-3 text-white mb-3 animated slideInDown">{{ dish.name }}</h1>
                 <nav aria-label="breadcrumb">
                     <ol class="breadcrumb justify-content-center text-uppercase">
-                        <li class="breadcrumb-item"><a href="{% url 'index' %}">Головна</a></li>
-                        <li class="breadcrumb-item"><a href="{% url 'dishes:dishes' %}">Меню</a></li>
+                        <li class="breadcrumb-item"><a href="{% url 'index' %}">Home</a></li>
+                        <li class="breadcrumb-item"><a href="{% url 'dishes:dishes' %}">Menu</a></li>
                         <li class="breadcrumb-item text-white active" aria-current="page">{{ dish.name }}</li>
                     </ol>
                 </nav>
@@ -86,10 +86,10 @@
                                 <span>Категорія: {{ dish.standard_category.name }}</span>
                             {% endif %}
                             {% if dish.is_vegetarian %}
-                                <span><i class="fas fa-leaf text-success"></i> Вегетаріанська</span>
+                                <span><i class="fas fa-leaf text-success"></i> Vegetarian</span>
                             {% endif %}
                             {% if dish.is_spicy %}
-                                <span><i class="fas fa-pepper-hot text-danger"></i> Гостра</span>
+                                <span><i class="fas fa-pepper-hot text-danger"></i> Acute</span>
                             {% endif %}
                             {% for tag in dish.recommendation_tags.all %}
                                 <span>{{ tag.name }}</span>
@@ -101,7 +101,7 @@
                         {% endif %}
 
                         {% if dish.ingrtodish_set.all %}
-                            <h5 class="mb-2">Інгредієнти:</h5>
+                            <h5 class="mb-2">Ingredients:</h5>
                             <ul class="list-unstyled ingredients-list mb-4">
                                 {% for ingr_item in dish.ingrtodish_set.all %}
                                     <li>{{ ingr_item.ingredient.name }}: {{ ingr_item.quantity|floatformat:"-2" }} {{ ingr_item.unit }}</li>
@@ -109,7 +109,7 @@
                             </ul>
                         {% endif %}
 
-                        <a href="{% url 'dishes:dishes' %}" class="btn btn-primary py-3 px-5 mt-3"><i class="fas fa-arrow-left me-2"></i>Повернутися до меню</a>
+                        <a href="{% url 'dishes:dishes' %}" class="btn btn-primary py-3 px-5 mt-3"><i class="fas fa-arrow-left me-2"></i>Return to menu</a>
                     </div>
                 </div>
             </div>
