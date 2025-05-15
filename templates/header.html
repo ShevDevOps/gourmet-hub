@@ -15,15 +15,15 @@
         </button>
         <div class="collapse navbar-collapse" id="navbarCollapse">
             <div class="navbar-nav ms-auto py-0 pe-4">
-                <a class="nav-item nav-link" href="{% url 'index' %}" >Головна сторінка</a>
-                <a class="nav-item nav-link" href="{% url 'dishes:dishes' %}" >Страви</a>
-                <a class="nav-item nav-link" href="{% url 'shefs' %}" >Наші шефи</a>
+                <a class="nav-item nav-link" href="{% url 'index' %}" >Home page</a>
+                <a class="nav-item nav-link" href="{% url 'dishes:dishes' %}" >Menu</a>
+                <a class="nav-item nav-link" href="{% url 'shefs' %}" >Our chefs</a>
                 {% if user.is_authenticated %}
-                    <a class="nav-item nav-link" href="{% url 'order_table' %}" >замовити столик</a>
+                    <a class="nav-item nav-link" href="{% url 'order_table' %}" >book a table</a>
                     <a class="nav-item nav-link" href="{% url 'logout' %}">Logout</a>
                 {% else %}
                     <a class="nav-item nav-link" href="{% url 'login' %}">Login</a>
-                    <a class="nav-item nav-link" href="{% url 'register' %}">Реєстрація</a>
+                    <a class="nav-item nav-link" href="{% url 'register' %}">Registration</a>
                 {% endif %}
             </div>
         </div>
