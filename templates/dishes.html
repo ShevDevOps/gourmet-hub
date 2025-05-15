@@ -13,8 +13,11 @@
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link href="https://fonts.googleapis.com/css2?family=Heebo:wght@400;500;600&family=Nunito:wght@600;700;800&family=Pacifico&display=swap" rel="stylesheet">
-    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.10.0/css/all.min.css" rel="stylesheet">
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.4/css/all.min.css" rel="stylesheet">
     <link href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.4.1/font/bootstrap-icons.css" rel="stylesheet">
+    
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/noUiSlider/15.7.1/nouislider.min.css" rel="stylesheet">
+
     <link href='{% static "lib/animate/animate.min.css" %}' rel="stylesheet">
     <link href='{% static "lib/owlcarousel/assets/owl.carousel.min.css" %}' rel="stylesheet">
     <link href='{% static "lib/tempusdominus/css/tempusdominus-bootstrap-4.min.css" %}' rel="stylesheet" />
@@ -22,14 +25,58 @@
     <link href='{% static "css/style.css" %}' rel="stylesheet">
 
     <style>
-        .filter-form .form-label {
-            font-weight: 600;
-            margin-bottom: 0.3rem;
+        .filter-sidebar {
+            background-color: #f8f9fa;
+            padding: 20px;
+            border-radius: 0.25rem;
+            height: 100%;
         }
-        .filter-form .form-check-label {
-            margin-left: 0.5rem;
+        .filter-sidebar h5 {
+            margin-top: 1.5rem;
+            margin-bottom: 0.75rem;
+            color: var(--primary);
+            font-family: 'Nunito', sans-serif;
+        }
+        .filter-sidebar .form-check {
+            margin-bottom: 0.5rem;
+        }
+        .filter-sidebar .form-check-label {
             font-weight: normal;
         }
+        .filter-sidebar .form-control-sm {
+            margin-bottom: 1rem;
+        }
+        .price-slider-values {
+            display: flex;
+            justify-content: space-between;
+            margin-top: 0.5rem;
+            font-size: 0.9em;
+        }
+        #price-slider {
+            margin: 15px 5px 25px 5px;
+            height: 8px;
+        }
+        #price-slider .noUi-connect {
+            background: var(--primary);
+        }
+        #price-slider .noUi-handle {
+            border: 1px solid #D9D9D9;
+            border-radius: 50%; 
+            background: #FFF;
+            box-shadow: none;
+            width: 18px !important;
+            height: 18px !important;
+            right: -9px !important;
+            top: -7px !important;
+        }
+        #price-slider .noUi-handle:focus {
+            outline: none;
+        }
+        #price-slider .noUi-handle::before,
+        #price-slider .noUi-handle::after {
+            display: none;
+        }
+
         .dish-img-placeholder {
             width: 80px;
             height: 80px;
@@ -66,6 +113,21 @@
             color: var(--primary);
             font-size: 2.5rem;
         }
+        .filter-actions {
+            margin-top: 1.5rem;
+        }
+        .filter-actions .btn {
+            margin-right: 0.5rem;
+        }
+        .filter-scrollable-list {
+            max-height: 200px;
+            overflow-y: auto;
+            border: 1px solid #ddd;
+            padding: 10px;
+            border-radius: .25rem;
+            background-color: #fff;
+        }
+
     </style>
 </head>
 
@@ -83,135 +145,196 @@
                 <h1 class="display-3 text-white mb-3 animated slideInDown">Our Menu</h1>
                 <nav aria-label="breadcrumb">
                     <ol class="breadcrumb justify-content-center text-uppercase">
-                        <li class="breadcrumb-item"><a href="/">Home</a></li> {# Link to home page #}
+                        <li class="breadcrumb-item"><a href="/">Home</a></li>
                         <li class="breadcrumb-item text-white active" aria-current="page">Menu</li>
                     </ol>
                 </nav>
-                <div class="text-center wow fadeInUp" data-wow-delay="0.1s">
-                    <h5 class="section-title ff-secondary text-center text-primary fw-normal">Food Menu</h5>
-                    <h1 class="display-3 text-white mb-3 animated slideInDown">Explore Our Dishes</h1>
-                </div>
             </div>
         </div>
+
         <div class="container-xxl py-5">
             <div class="container">
-                
-                <div class="row mb-5 wow fadeInUp filter-form" data-wow-delay="0.2s">
-                    <div class="col-12">
-                        <form method="get" action="{% url 'dishes' %}" class="row g-3 align-items-end bg-light p-3 rounded">
-                            <div class="col-lg-3 col-md-6">
-                                <label for="search" class="form-label">Search</label>
-                                <input type="text" class="form-control form-control-sm" id="search" name="search" placeholder="Name, description, ingredient..." value="{{ search_query|default:'' }}">
-                            </div>
-                            <div class="col-lg-2 col-md-6">
-                                <label for="standard_category" class="form-label">Category</label>
-                                <select class="form-select form-select-sm" id="standard_category" name="standard_category">
-                                    <option value="">-- All Categories --</option>
-                                    {% for category in standard_categories %}
-                                        <option value="{{ category.id }}" {% if category.id|stringformat:"s" == selected_standard_category_id %}selected{% endif %}>
-                                            {{ category.name }}
-                                        </option>
-                                    {% endfor %}
-                                </select>
-                            </div>
-                            <div class="col-lg-2 col-md-6">
-                                <label for="recommendation_tag" class="form-label">Recommendations</label>
-                                <select class="form-select form-select-sm" id="recommendation_tag" name="recommendation_tag">
-                                    <option value="">-- All Recommendations --</option>
-                                    {% for tag in recommendation_tags %}
-                                        <option value="{{ tag.id }}" {% if tag.id|stringformat:"s" == selected_tag_id %}selected{% endif %}>
-                                            {{ tag.name }}
-                                        </option>
-                                    {% endfor %}
-                                </select>
-                            </div>
-                            <div class="col-lg-3 col-md-6">
-                                <label class="form-label d-block mb-2">Other Filters</label>
-                                <div class="d-flex flex-wrap">
-                                    <div class="form-check form-check-inline me-3">
-                                        <input class="form-check-input" type="checkbox" id="vegetarian" name="vegetarian" {% if filter_vegetarian %}checked{% endif %}>
-                                        <label class="form-check-label" for="vegetarian">
-                                            <i class="fas fa-leaf text-success" title="Vegetarian"></i> Veg.
-                                        </label>
-                                    </div>
-                                    <div class="form-check form-check-inline me-3">
-                                        <input class="form-check-input" type="checkbox" id="spicy" name="spicy" {% if filter_spicy %}checked{% endif %}>
-                                        <label class="form-check-label" for="spicy">
-                                            <i class="fas fa-pepper-hot text-danger" title="Spicy"></i> Spicy
-                                        </label>
-                                    </div>
+                <div class="row g-5">
+                    <div class="col-lg-3 wow fadeInUp" data-wow-delay="0.1s">
+                        <div class="filter-sidebar">
+                            <h4 class="mb-4 ff-secondary text-primary">Filters</h4>
+                            <form method="get" action="{% url 'dishes' %}" id="filter-form">
+                                <h5>Search</h5>
+                                <input type="text" class="form-control form-control-sm" id="search" name="search" placeholder="Name, description..." value="{{ search_query|default:'' }}">
+
+                                <h5>Price Range</h5>
+                                <div id="price-slider"></div>
+                                <div class="price-slider-values">
+                                    <span id="min-price-display">${{ current_min_price_val|floatformat:2 }}</span>
+                                    <span id="max-price-display">${{ current_max_price_val|floatformat:2 }}</span>
                                 </div>
+                                <input type="hidden" name="min_price" id="hidden_min_price" value="{{ min_price_form|default:'' }}">
+                                <input type="hidden" name="max_price" id="hidden_max_price" value="{{ max_price_form|default:'' }}">
+
+                                <h5>Categories</h5>
+                                <div class="filter-scrollable-list">
+                                    {% for category in standard_categories %}
+                                    <div class="form-check">
+                                        <input class="form-check-input" type="checkbox" name="standard_category" value="{{ category.id }}" id="cat_{{ category.id }}"
+                                               {% if category.id|stringformat:"s" in selected_standard_category_ids %}checked{% endif %}>
+                                        <label class="form-check-label" for="cat_{{ category.id }}">
+                                            {{ category.name }}
+                                        </label>
+                                    </div>
+                                    {% endfor %}
+                                </div>
+
+                                <h5>Tags</h5>
+                                <div class="filter-scrollable-list">
+                                {% for tag in recommendation_tags %}
+                                <div class="form-check">
+                                    <input class="form-check-input" type="checkbox" name="recommendation_tag" value="{{ tag.id }}" id="tag_{{ tag.id }}"
+                                           {% if tag.id|stringformat:"s" in selected_tag_ids %}checked{% endif %}>
+                                    <label class="form-check-label" for="tag_{{ tag.id }}">
+                                        {{ tag.name }}
+                                    </label>
+                                </div>
+                                {% endfor %}
+                                </div>
+
+                                <h5>Other</h5>
+                                <div class="form-check">
+                                    <input class="form-check-input" type="checkbox" id="vegetarian" name="vegetarian" {% if filter_vegetarian %}checked{% endif %}>
+                                    <label class="form-check-label" for="vegetarian">
+                                        <i class="fas fa-leaf text-success" title="Vegetarian"></i> Vegetarian
+                                    </label>
+                                </div>
+                                <div class="form-check">
+                                    <input class="form-check-input" type="checkbox" id="spicy" name="spicy" {% if filter_spicy %}checked{% endif %}>
+                                    <label class="form-check-label" for="spicy">
+                                        <i class="fas fa-pepper-hot text-danger" title="Spicy"></i> Spicy
+                                    </label>
+                                </div>
+
+                                <div class="filter-actions d-flex mt-4">
+                                    <button type="submit" class="btn btn-primary btn-sm">Apply</button>
+                                    <a href="{% url 'dishes' %}" class="btn btn-outline-secondary btn-sm ms-2">Reset</a>
+                                </div>
+                            </form>
+                        </div>
+                    </div>
+
+                    <div class="col-lg-9">
+                        <div class="text-center wow fadeInUp mb-4" data-wow-delay="0.1s">
+                            <h5 class="section-title ff-secondary text-center text-primary fw-normal">Food Menu</h5>
+                             <h1 class="mb-3">Explore Our Dishes</h1>
+                        </div>
+                        
+                        {% regroup dishes by standard_category as category_list %}
+
+                        {% if dishes %} {# Check if there are any dishes after filtering #}
+                            {% if category_list %}
+                                {% for category_group in category_list %}
+                                <div class="category-header wow fadeInUp" data-wow-delay="0.1s">
+                                   <h2>{% if category_group.grouper %}{{ category_group.grouper.name }}{% else %}Other Dishes{% endif %}</h2>
+                                </div>
+                                <div class="row g-4">
+                                    {% for dish in category_group.list %}
+                                    <div class="col-md-6 wow fadeInUp" data-wow-delay="{{ forloop.counter0|divisibleby:2|yesno:'0.2,0.3' }}s">
+                                        <div class="d-flex align-items-center">
+                                            {% if dish.image %}
+                                                <a href="{% url 'dish_detail' dish_id=dish.id %}">
+                                                    <img class="flex-shrink-0 img-fluid rounded" src="{{ dish.image.url }}" alt="{{ dish.name }}" style="width: 80px; height: 80px; object-fit: cover;">
+                                                </a>
+                                            {% else %}
+                                                 <a href="{% url 'dish_detail' dish_id=dish.id %}" class="dish-img-placeholder rounded">
+                                                    <i class="fas fa-utensils"></i>
+                                                </a>
+                                            {% endif %}
+                                            <div class="w-100 d-flex flex-column text-start ps-4">
+                                                <h5 class="d-flex justify-content-between border-bottom pb-2 mb-1">
+                                                    <span>
+                                                        <a href="{% url 'dish_detail' dish_id=dish.id %}" class="text-dark text-decoration-none">
+                                                            {{ dish.name }}
+                                                        </a>
+                                                        {% if dish.is_vegetarian %}<i class="fas fa-leaf text-success ms-1" title="Вегетаріанська"></i>{% endif %}
+                                                        {% if dish.is_spicy %}<i class="fas fa-pepper-hot text-danger ms-1" title="Гостра"></i>{% endif %}
+                                                    </span>
+                                                    <span class="text-primary">${{ dish.price|floatformat:2 }}</span>
+                                                </h5>
+                                                {% if dish.description %}
+                                                    <small class="fst-italic text-muted mb-1">{{ dish.description|truncatewords:12 }}</small>
+                                                {% endif %}
+                                                {% if dish.recommendation_tags.exists %}
+                                                    <div class="dish-tags mt-1">
+                                                        {% for tag in dish.recommendation_tags.all %}
+                                                            <span>{{ tag.name }}</span>
+                                                        {% endfor %}
+                                                    </div>
+                                                {% endif %}
+                                                <a href="{% url 'dish_detail' dish_id=dish.id %}" class="btn btn-sm btn-outline-primary mt-2 align-self-start" style="max-width: 150px;">More details</a>
+                                            </div>
+                                        </div>
+                                    </div>
+                                    {% endfor %}
+                                </div>
+                                {% endfor %}
+                            {% else %} {# This case might occur if dishes exist but not grouped (e.g. no category assigned) #}
+                                <div class="row g-4">
+                                     {% for dish in dishes %}
+                                     <div class="col-md-6 wow fadeInUp" data-wow-delay="{{ forloop.counter0|divisibleby:2|yesno:'0.2,0.3' }}s">
+                                        <div class="d-flex align-items-center">
+                                            {% if dish.image %}
+                                                <a href="{% url 'dish_detail' dish_id=dish.id %}">
+                                                    <img class="flex-shrink-0 img-fluid rounded" src="{{ dish.image.url }}" alt="{{ dish.name }}" style="width: 80px; height: 80px; object-fit: cover;">
+                                                </a>
+                                            {% else %}
+                                                 <a href="{% url 'dish_detail' dish_id=dish.id %}" class="dish-img-placeholder rounded">
+                                                    <i class="fas fa-utensils"></i>
+                                                </a>
+                                            {% endif %}
+                                            <div class="w-100 d-flex flex-column text-start ps-4">
+                                                <h5 class="d-flex justify-content-between border-bottom pb-2 mb-1">
+                                                    <span>
+                                                        <a href="{% url 'dish_detail' dish_id=dish.id %}" class="text-dark text-decoration-none">
+                                                            {{ dish.name }}
+                                                        </a>
+                                                        {% if dish.is_vegetarian %}<i class="fas fa-leaf text-success ms-1" title="Вегетаріанська"></i>{% endif %}
+                                                        {% if dish.is_spicy %}<i class="fas fa-pepper-hot text-danger ms-1" title="Гостра"></i>{% endif %}
+                                                    </span>
+                                                    <span class="text-primary">${{ dish.price|floatformat:2 }}</span>
+                                                </h5>
+                                                {% if dish.description %}
+                                                    <small class="fst-italic text-muted mb-1">{{ dish.description|truncatewords:12 }}</small>
+                                                {% endif %}
+                                                {% if dish.recommendation_tags.exists %}
+                                                    <div class="dish-tags mt-1">
+                                                        {% for tag in dish.recommendation_tags.all %}
+                                                            <span>{{ tag.name }}</span>
+                                                        {% endfor %}
+                                                    </div>
+                                                {% endif %}
+                                                <a href="{% url 'dish_detail' dish_id=dish.id %}" class="btn btn-sm btn-outline-primary mt-2 align-self-start" style="max-width: 150px;">More details</a>
+                                            </div>
+                                        </div>
+                                    </div>
+                                     {% endfor %}
+                                </div>
+                            {% endif %}
+                        {% else %}
+                             <div class="col-12 text-center wow fadeInUp mt-5" data-wow-delay="0.1s">
+                                <p class="lead">Sorry, no dishes found matching your criteria.</p>
+                                <a href="{% url 'dishes' %}" class="btn btn-outline-primary mt-3">Reset All Filters</a>
                             </div>
-                            <div class="col-lg-2 col-md-12">
-                                <button type="submit" class="btn btn-primary btn-sm w-100">Filter / Search</button>
-                            </div>
-                        </form>
+                        {% endif %}
                     </div>
                 </div>
-
-                {% regroup dishes by standard_category as category_list %}
-
-                {% if category_list %}
-                    {% for category_group in category_list %}
-                        <div class="category-header wow fadeInUp" data-wow-delay="0.1s">
-                           <h2>{% if category_group.grouper %}{{ category_group.grouper.name }}{% else %}Інші страви{% endif %}</h2>
-                        </div>
-                        <div class="row g-4">
-                            {% for dish in category_group.list %}
-                            <div class="col-lg-6 wow fadeInUp" data-wow-delay="{{ forloop.counter0|divisibleby:2|yesno:'0.1,0.2' }}s">
-                                <div class="d-flex align-items-center">
-                                    {% if dish.image %}
-                                        <a href="{% url 'dish_detail' dish_id=dish.id %}">
-                                            <img class="flex-shrink-0 img-fluid rounded" src="{{ dish.image.url }}" alt="{{ dish.name }}" style="width: 80px; height: 80px; object-fit: cover;">
-                                        </a>
-                                    {% else %}
-                                         <a href="{% url 'dish_detail' dish_id=dish.id %}" class="dish-img-placeholder rounded">
-                                            <i class="fas fa-utensils"></i>
-                                        </a>
-                                    {% endif %}
-                                    <div class="w-100 d-flex flex-column text-start ps-4">
-                                        <h5 class="d-flex justify-content-between border-bottom pb-2 mb-1">
-                                            <span>
-                                                <a href="{% url 'dish_detail' dish_id=dish.id %}" class="text-dark text-decoration-none">
-                                                    {{ dish.name }}
-                                                </a>
-                                                {% if dish.is_vegetarian %}<i class="fas fa-leaf text-success ms-1 fs- L" title="Вегетаріанська"></i>{% endif %}
-                                                {% if dish.is_spicy %}<i class="fas fa-pepper-hot text-danger ms-1" title="Гостра"></i>{% endif %}
-                                            </span>
-                                            <span class="text-primary">${{ dish.price|floatformat:2 }}</span>
-                                        </h5>
-                                        {% if dish.description %}
-                                            <small class="fst-italic text-muted mb-1">{{ dish.description|truncatewords:12 }}</small>
-                                        {% endif %}
-                                        {% if dish.recommendation_tags.exists %}
-                                            <div class="dish-tags mt-1">
-                                                {% for tag in dish.recommendation_tags.all %}
-                                                    <span>{{ tag.name }}</span>
-                                                {% endfor %}
-                                            </div>
-                                        {% endif %}
-                                        <a href="{% url 'dish_detail' dish_id=dish.id %}" class="btn btn-sm btn-outline-primary mt-2" style="max-width: 150px;">More details</a>
-                                    </div>
-                                </div>
-                            </div>
-                            {% endfor %}
-                        </div>
-                    {% endfor %}
-                {% else %}
-                     <div class="col-12 text-center wow fadeInUp" data-wow-delay="0.1s">
-                        <p class="lead">Sorry, no dishes found matching your criteria.</p>
-                        <a href="{% url 'dishes' %}" class="btn btn-outline-primary mt-3">Reset Filters</a>
-                    </div>
-                {% endif %}
-
             </div>
         </div> 
-         
+        
         <a href="#" class="btn btn-lg btn-primary btn-lg-square back-to-top"><i class="bi bi-arrow-up"></i></a>
     </div>
 
     <script src="https://code.jquery.com/jquery-3.4.1.min.js"></script>
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.0.0/dist/js/bootstrap.bundle.min.js"></script>
+    
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/noUiSlider/15.7.1/nouislider.min.js"></script>
+    
     <script src='{% static "lib/wow/wow.min.js" %}'></script>
     <script src='{% static "lib/easing/easing.min.js" %}'></script>
     <script src='{% static "lib/waypoints/waypoints.min.js" %}'></script>
@@ -220,6 +343,12 @@
     <script src='{% static "lib/tempusdominus/js/moment.min.js" %}'></script>
     <script src='{% static "lib/tempusdominus/js/moment-timezone.min.js" %}'></script>
     <script src='{% static "lib/tempusdominus/js/tempusdominus-bootstrap-4.min.js" %}'></script>
+
     <script src='{% static "js/main.js" %}'></script>
+
+    {{ price_slider_js_config|json_script:"price-slider-js-config-data" }}
+
+    <script src="{% static 'js/dishes_filters.js' %}" defer></script>  
+ 
 </body>
 </html>
