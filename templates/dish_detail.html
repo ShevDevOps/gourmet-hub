@@ -59,7 +59,7 @@
                 <nav aria-label="breadcrumb">
                     <ol class="breadcrumb justify-content-center text-uppercase">
                         <li class="breadcrumb-item"><a href="{% url 'index' %}">Головна</a></li>
-                        <li class="breadcrumb-item"><a href="{% url 'dishes' %}">Меню</a></li>
+                        <li class="breadcrumb-item"><a href="{% url 'dishes:dishes' %}">Меню</a></li>
                         <li class="breadcrumb-item text-white active" aria-current="page">{{ dish.name }}</li>
                     </ol>
                 </nav>
@@ -109,7 +109,7 @@
                             </ul>
                         {% endif %}
 
-                        <a href="{% url 'dishes' %}" class="btn btn-primary py-3 px-5 mt-3"><i class="fas fa-arrow-left me-2"></i>Повернутися до меню</a>
+                        <a href="{% url 'dishes:dishes' %}" class="btn btn-primary py-3 px-5 mt-3"><i class="fas fa-arrow-left me-2"></i>Повернутися до меню</a>
                     </div>
                 </div>
             </div>
