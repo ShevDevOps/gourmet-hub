@@ -4,7 +4,7 @@ on:
   [workflow_dispatch]
 
 jobs:
-  publish:
+  Publish:
     runs-on: ubuntu-latest
     steps:
     - uses: actions/checkout@v4
@@ -16,13 +16,16 @@ jobs:
         registry: docker.io
         username: ${{secrets.DOCKER_USERNAME}}
         password: ${{secrets.DOCKER_PASSWORD}}
-
-    - name: Deploy
+  Deploy:
+    runs-on: ubuntu-latest
+    steps:
+    - name: Deploy container
       uses: appleboy/ssh-action@v1
       with:
         host: ${{ secrets.HOST }}
         username: ${{ secrets.USERNAME }}
         key: ${{ secrets.KEY }}
         script: |
+          docker-compose down
           docker pull ${{secrets.DOCKER_USERNAME}}/${{secrets.DOCKER_IMAGE}}:latest
           docker-compose up -d
