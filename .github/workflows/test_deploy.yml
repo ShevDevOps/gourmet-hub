@@ -12,7 +12,7 @@ jobs:
     - name: Build and publish container
       uses: mr-smithers-excellent/docker-build-push@v6
       with:
-        image: ${{secrets.DOCKER_USERNAME}}/${{secrets.DOCKER_IMAGE}}
+        image: ${{secrets.DOCKER_USERNAME}}/${{secrets.DOCKER_IMAGE}}:latest
         registry: docker.io
         username: ${{secrets.DOCKER_USERNAME}}
         password: ${{secrets.DOCKER_PASSWORD}}
