@@ -31,4 +31,4 @@ class DishToTable(models.Model):
     Dish = models.ForeignKey(Dish, on_delete=models.CASCADE)
 
     def __str__(self):
-        return f"Order for {self.table} at {self.order_time}"
+        return f"Order for {self.table} at {self.table.Order_time}"

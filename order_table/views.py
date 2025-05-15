@@ -26,6 +26,6 @@ def order_table(request):
             capacity=table.capacity,
         )
 
-        return render('index.html', {'order': order})
+        return render(request, 'index.html', {'order': order})
     tables = Table.objects.all()
     return render(request, 'order.html', {'tables': tables})
