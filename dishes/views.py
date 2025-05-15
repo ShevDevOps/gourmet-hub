@@ -35,7 +35,6 @@ def dishes(request):
     min_price_str = request.GET.get('min_price', '').strip()
     max_price_str = request.GET.get('max_price', '').strip()
 
-    # Отримуємо загальний мінімальний та максимальний діапазон цін з усіх страв
     price_range_data = Dish.objects.all().aggregate(
         actual_min_price=Min('price'),
         actual_max_price=Max('price')
@@ -43,36 +42,32 @@ def dishes(request):
     overall_min_price = price_range_data['actual_min_price'] if price_range_data['actual_min_price'] is not None else 0.0
     overall_max_price = price_range_data['actual_max_price'] if price_range_data['actual_max_price'] is not None else 1000.0
 
-    # Якщо всі ціни однакові або немає цін, встановлюємо розумний діапазон для слайдера
     if overall_min_price == overall_max_price:
-        # Якщо є хоча б одна страва, робимо діапазон трохи більшим за єдину ціну
         if Dish.objects.exists():
-             overall_max_price = overall_min_price + 100 # Або інша логіка
-        else: # Якщо зовсім немає страв
-             overall_max_price = 1000.0 # Якийсь дефолтний максимум
+             overall_max_price = overall_min_price + 100
+        else:
+             overall_max_price = 1000.0
              overall_min_price = 0.0
 
-    # Визначаємо поточні значення фільтра ціни, які прийшли в запиті
     current_min_price = None
     if min_price_str:
         try:
             current_min_price = float(min_price_str)
         except ValueError:
-            pass # Ігноруємо невірне значення
+            pass
 
     current_max_price = None
     if max_price_str:
         try:
             current_max_price = float(max_price_str)
         except ValueError:
-            pass # Ігноруємо невірне значення
+            pass
 
-    # Застосування фільтрів до queryset
     if search_query:
         dishes_queryset = dishes_queryset.filter(
             Q(name__icontains=search_query) |
             Q(description__icontains=search_query) |
-            Q(ingredients_list__name__icontains=search_query) | # Переконайтеся, що ingredients_list правильно пов'язаний або використовуйте Prefetch, якщо це ManyToMany/Reverse ForeignKey
+            Q(ingredients_list__name__icontains=search_query) |
             Q(standard_category__name__icontains=search_query) |
             Q(recommendation_tags__name__icontains=search_query)
         ).distinct()
@@ -92,7 +87,6 @@ def dishes(request):
     if filter_spicy:
         dishes_queryset = dishes_queryset.filter(is_spicy=True)
 
-    # Застосовуємо фільтр ціни після визначення current_min/max_price
     if current_min_price is not None:
         dishes_queryset = dishes_queryset.filter(price__gte=current_min_price)
 
@@ -101,17 +95,13 @@ def dishes(request):
 
     dishes_queryset = dishes_queryset.order_by('standard_category__name', 'name')
 
-    # Формуємо дані для JavaScript слайдера
-    # Використовуємо current_min/max_price, якщо вони встановлені, інакше - загальні межі
     initial_min_slider = current_min_price if current_min_price is not None else overall_min_price
     initial_max_slider = current_max_price if current_max_price is not None else overall_max_price
 
-    # Переконаємося, що початкові значення знаходяться в межах загального діапазону
     initial_min_slider = max(overall_min_price, min(initial_min_slider, overall_max_price))
     initial_max_slider = min(overall_max_price, max(initial_max_slider, overall_min_price))
-    # Та що initial_min_slider не більший за initial_max_slider
     if initial_min_slider > initial_max_slider:
-        initial_max_slider = initial_min_slider # Або інша логіка, наприклад, встановити їх обох у середнє
+        initial_max_slider = initial_min_slider
 
     price_slider_js_config = {
         'overallMin': overall_min_price,
@@ -130,15 +120,14 @@ def dishes(request):
         'filter_vegetarian': filter_vegetarian,
         'filter_spicy': filter_spicy,
 
-        # Ці змінні вже використовуються для відображення значень, можна залишити, але JS буде використовувати дані з json_script
-        'current_min_price_val': initial_min_slider, # Можна використовувати initial_min_slider
-        'current_max_price_val': initial_max_slider, # Можна використовувати initial_max_slider
+        'current_min_price_val': initial_min_slider,
+        'current_max_price_val': initial_max_slider,
         'overall_min_price_slider': overall_min_price,
         'overall_max_price_slider': overall_max_price,
 
-        'min_price_form': min_price_str, # Для збереження введеного значення у прихованому полі
-        'max_price_form': max_price_str, # Для збереження введеного значення у прихованому полі
+        'min_price_form': min_price_str,
+        'max_price_form': max_price_str,
 
-        'price_slider_js_config': price_slider_js_config, # ДОДАНО: Передача даних для JS
+        'price_slider_js_config': price_slider_js_config,
     }
     return render(request, 'dishes.html', context)
